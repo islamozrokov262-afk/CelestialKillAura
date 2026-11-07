@@ -1,7 +1,7 @@
 package com.islamozroko.celestialaura;
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
-import com.terraformmersmc.modmenu.api.ModMenuApi;
+import com.terraformersmc.modmenu.api.ModMenuApi;
 
 public class CelestialAuraModMenu implements ModMenuApi {
     @Override
