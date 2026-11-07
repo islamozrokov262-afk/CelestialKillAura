@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "celestialaura",
+  "version": "1.0.0",
+  "name": "Celestial Aura",
+  "description": "Aura с меню и Silent Rotation",
+  "authors": ["Islam"],
+  "entrypoints": {
+    "client": [
+      "com.islamozroko.celestialaura.CelestialAuraMod"
+    ],
+    "modmenu": [
+      "com.islamozroko.celestialaura.CelestialAuraModMenu"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.20.1",
+    "minecraft": "~1.21.11",
+    "java": ">=21",
+    "fabric-api": "*",
+    "cloth-config": "*",
+    "modmenu": "*"
+  }
+}
