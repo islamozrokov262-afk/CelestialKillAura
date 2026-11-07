@@ -66,7 +66,7 @@ public class CelestialAuraMod implements ClientModInitializer {
                 RotationManager.updateRotations(target, config);
                 
                 if (client.player.getAttackStrengthScale(0.5f) >= 0.95f) {
-                    client.interactionManager.attackEntity(client.player, target);
+                    client.gameMode.attack(client.player, target);
                     client.player.swing(InteractionHand.MAIN_HAND);
                 }
             }
