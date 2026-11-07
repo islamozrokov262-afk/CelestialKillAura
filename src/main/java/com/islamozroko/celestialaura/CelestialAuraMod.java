@@ -6,7 +6,9 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -14,6 +16,7 @@ import net.minecraft.world.entity.player.Player;
 public class CelestialAuraMod implements ClientModInitializer {
     private static AuraConfig config;
     private static KeyMapping menuKey;
+    private static KeyMapping toggleKey; // Новая кнопка
     private static boolean enabled = true;
 
     public static final KeyMapping.Category CATEGORY = KeyMapping.Category.register(
@@ -24,11 +27,19 @@ public class CelestialAuraMod implements ClientModInitializer {
     public void onInitializeClient() {
         config = AuraConfig.load();
 
-        // Кнопка для открытия меню (по умолчанию R SHIFT)
+        // Кнопка открытия меню (R SHIFT)
         menuKey = KeyBindingHelper.registerKeyBinding(new KeyMapping(
                 "key.celestialaura.menu",
                 InputConstants.Type.KEYSYM,
                 InputConstants.KEY_RSHIFT,
+                CATEGORY
+        ));
+
+        // Кнопка Вкл/Выкл (R)
+        toggleKey = KeyBindingHelper.registerKeyBinding(new KeyMapping(
+                "key.celestialaura.toggle",
+                InputConstants.Type.KEYSYM,
+                InputConstants.KEY_R,
                 CATEGORY
         ));
 
@@ -40,16 +51,23 @@ public class CelestialAuraMod implements ClientModInitializer {
                 client.setScreen(AuraConfigScreen.create(client.screen));
             }
 
+            // Переключение Вкл/Выкл
+            while (toggleKey.consumeClick()) {
+                enabled = !enabled;
+                client.player.displayClientMessage(
+                        Component.literal("Aura: " + (enabled ? "§aON" : "§cOFF")), true
+                );
+            }
+
             if (!enabled) return;
 
             Entity target = findTarget(client);
             if (target != null) {
                 RotationManager.updateRotations(target, config);
                 
-                // Логика удара (проверка кулдауна и критов)
                 if (client.player.getAttackStrengthScale(0.5f) >= 0.95f) {
                     client.interactionManager.attackEntity(client.player, target);
-                    client.player.swing(net.minecraft.world.InteractionHand.MAIN_HAND);
+                    client.player.swing(InteractionHand.MAIN_HAND);
                 }
             }
         });
